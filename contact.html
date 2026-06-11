@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us | Kirmada.Online</title>
   <link rel="icon" href="small-logo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=6">
   <link rel="stylesheet" href="advanced-interactions.css?v=2">
-  <link rel="stylesheet" href="advanced-interactions.css">
+  <script type="module" src="dynamic-data.js?v=2"></script>
 </head>
 <body>
 
@@ -20,12 +20,17 @@
       <a href="index.html" class="nav-logo">
         <img src="large-logo.png" alt="Kirmada Logo" id="nav-small-logo" style="filter: hue-rotate(-115deg) saturate(1.5);">
       </a>
-      <div class="nav-links">
+      <button class="hamburger-menu" aria-label="Toggle Navigation" id="mobile-menu-btn">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="mobile-nav-links">
         <a href="index.html">Home</a>
         <a href="services.html">Services</a>
+        <a href="gallery.html">Gallery</a>
         <a href="about.html">About Us</a>
         <a href="contact.html">Contact</a>
-        <a href="contact.html" class="btn-primary" style="height: 36px; padding: 8px 16px; font-size: 14px;">Let's Talk</a>
+
+        <a href="contact.html" class="btn-primary liquid-cta" style="height: 36px; padding: 8px 16px; font-size: 14px;">Let's Talk</a>
       </div>
     </div>
   </nav>
@@ -98,6 +103,11 @@
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--rounded-lg);
             padding: var(--spacing-xxl); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          }
+          @media (max-width: 480px) {
+            .premium-form-container {
+              padding: var(--spacing-lg);
+            }
           }
           .premium-form { display: flex; flex-direction: column; gap: var(--spacing-lg); }
           .form-group { position: relative; width: 100%; }
@@ -228,13 +238,15 @@
             successMsg.style.display = 'flex';
             
             // Success Animation
-            anime({
-              targets: successMsg,
-              scale: [0.9, 1],
-              opacity: [0, 1],
-              duration: 800,
-              easing: 'easeOutElastic(1, .5)'
-            });
+            if (typeof anime !== 'undefined') {
+              anime({
+                targets: successMsg,
+                scale: [0.9, 1],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutElastic(1, .5)'
+              });
+            }
             
             // Reset form
             document.getElementById('protocol-form').reset();
@@ -316,94 +328,107 @@
     </div>
   </section>
 
-  </section>
-
   </main>
   <!-- END SWUP MAIN WRAPPER -->
 
   <!-- Liquid Transition Overlay -->
   <div class="liquid-curtain" id="liquid-curtain"></div>
 
-  <!-- Footer -->
-  <footer class="footer-premium">
-    <div class="footer-premium-glow"></div>
-    
-    <div class="container footer-premium-top">
-      <div class="footer-brand-col">
-        <a href="index.html" class="footer-logo">
-          <img src="large-logo.png" alt="Kirmada Logo" style="filter: hue-rotate(-115deg) saturate(1.5); width: 140px; margin-bottom: 24px;">
-        </a>
-        <p class="footer-mission">
-          Commanding the digital frontier. We build, scale, and automate digital empires with elite precision.
-        </p>
-        <div class="footer-status">
-          <span class="status-dot pulse-dot"></span>
-          <span>Accepting New Clients</span>
-        </div>
-        <a href="mailto:kirmada.online@gmail.com" class="footer-email">kirmada.online@gmail.com</a>
-      </div>
-
-      <div class="footer-links-col">
-        <div class="footer-nav-group">
-          <h4 class="footer-heading">Navigation</h4>
-          <a href="index.html" class="footer-link">Home</a>
-          <a href="services.html" class="footer-link">Services</a>
-          <a href="about.html" class="footer-link">About Us</a>
-          <a href="contact.html" class="footer-link">Contact</a>
-        </div>
-        
-        <div class="footer-nav-group">
-          <h4 class="footer-heading">Social</h4>
-          <a href="https://wa.me/9028551638" target="_blank" class="footer-link">WhatsApp <svg class="external-icon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17l9.2-9.2M17 16.8V7H7.2"/></svg></a>
-          <a href="https://www.instagram.com/kirmada.online/" target="_blank" class="footer-link">Instagram <svg class="external-icon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17l9.2-9.2M17 16.8V7H7.2"/></svg></a>
-          <a href="https://www.facebook.com/profile.php?id=61590268064411" target="_blank" class="footer-link">Facebook <svg class="external-icon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17l9.2-9.2M17 16.8V7H7.2"/></svg></a>
-          <a href="https://x.com/kirmadaonline" target="_blank" class="footer-link">X (Twitter) <svg class="external-icon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17l9.2-9.2M17 16.8V7H7.2"/></svg></a>
-          <a href="https://www.reddit.com/user/KirmadaOnline/" target="_blank" class="footer-link">Reddit <svg class="external-icon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17l9.2-9.2M17 16.8V7H7.2"/></svg></a>
-        </div>
-
-        <div class="footer-nav-group">
-          <h4 class="footer-heading">Legal</h4>
-          <a href="#" class="footer-link">Privacy Policy</a>
-          <a href="#" class="footer-link">Terms of Service</a>
-          <a href="#" class="footer-link">Refund Policy</a>
-        </div>
-      </div>
-    </div>
-    
-    <div class="footer-premium-bottom">
-      <div class="container flex justify-between items-center bottom-text-row">
-        <p>&copy; 2026 Kirmada.Online. All rights reserved.</p>
-        <p>Engineered for Dominance.</p>
-      </div>
-      
-      <!-- MASSIVE KINETIC TEXT -->
-      <div class="footer-massive-text">
-        KIRMADA.ONLINE
-      </div>
-    </div>
-  </footer>
+  <!-- Footer Component -->
+  <kirmada-footer></kirmada-footer>
 
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="footer-component.js"></script>
+  <!-- App Scripts -->
   <script src="https://unpkg.com/swup@4"></script>
-  <script src="app.js?v=2"></script>
-  <script src="advanced-interactions.js?v=2"></script>
-  <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/9028551638" class="wa-premium-btn" target="_blank" rel="noopener noreferrer" aria-label="Discuss Your Project on WhatsApp">
-    <div class="wa-premium-glow"></div>
-    <div class="wa-premium-content">
-      <div class="wa-icon-wrapper">
+  <script src="app.js?v=5"></script>
+  <script src="advanced-interactions.js?v=5"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Liquid CTA Spring Animation
+      const liquidCtas = document.querySelectorAll('.liquid-cta');
+      liquidCtas.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          anime({
+            targets: btn,
+            scale: 1.05,
+            duration: 800,
+            elasticity: 400
+          });
+        });
+        btn.addEventListener('mouseleave', () => {
+          anime({
+            targets: btn,
+            scale: 1,
+            duration: 600,
+            elasticity: 300
+          });
+        });
+      });
+    });
+  </script>
+  <!-- Premium Floating AI Chatbot -->
+  <div id="ai-chat-widget" class="ai-chat-widget">
+    <!-- The Floating Button -->
+    <div class="ai-chat-button" id="ai-chat-toggle">
+      <div class="ai-chat-glow"></div>
+      <div class="ai-chat-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
+          <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
         </svg>
       </div>
-      <div class="wa-text-wrapper">
-        <span class="wa-status"><span class="wa-dot"></span> Available Now</span>
-        <span class="wa-text">Discuss Your Project</span>
+    </div>
+
+    <!-- The Chat Window -->
+    <div class="ai-chat-window hidden" id="ai-chat-window">
+      <div class="ai-chat-header">
+        <div class="ai-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+            <rect x="9" y="9" width="6" height="6"></rect>
+            <line x1="9" y1="1" x2="9" y2="4"></line>
+            <line x1="15" y1="1" x2="15" y2="4"></line>
+            <line x1="9" y1="20" x2="9" y2="23"></line>
+            <line x1="15" y1="20" x2="15" y2="23"></line>
+            <line x1="20" y1="9" x2="23" y2="9"></line>
+            <line x1="20" y1="14" x2="23" y2="14"></line>
+            <line x1="1" y1="9" x2="4" y2="9"></line>
+            <line x1="1" y1="14" x2="4" y2="14"></line>
+          </svg>
+        </div>
+        <div class="ai-header-info">
+          <h4>Kirmada Assistant</h4>
+          <span class="ai-status"><span class="wa-dot"></span> Online</span>
+        </div>
+        <button class="ai-close-btn" id="ai-chat-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <div class="ai-chat-messages" id="ai-chat-messages">
+        <!-- Messages will be injected here -->
+        <div class="ai-message bot-message">
+          <p>Hi! I'm the Kirmada AI. How can I help you scale your brand today?</p>
+        </div>
+      </div>
+
+      <div class="ai-chat-input-area">
+        <input type="text" id="ai-chat-input" placeholder="Type a message..." autocomplete="off">
+        <button id="ai-chat-send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
       </div>
     </div>
-  </a>
+  </div>
+
+  <script type="module" src="dynamic-data.js"></script>
+  <script type="module" src="chatbot.js"></script>
+  <script src="custom-dropdown.js?v=3"></script>
 </body>
 </html>

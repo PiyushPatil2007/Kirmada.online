@@ -14,6 +14,30 @@ window.initAppAnimations = function() {
     gsap.registerPlugin(ScrollTrigger);
   }
 
+  // 0. Hamburger Menu Logic
+  const hamburger = document.getElementById('mobile-menu-btn');
+  const mobileNav = document.getElementById('mobile-nav-links');
+  
+  if (hamburger && mobileNav) {
+    // Remove old listeners to prevent duplicates on swup transition
+    const newHamburger = hamburger.cloneNode(true);
+    hamburger.parentNode.replaceChild(newHamburger, hamburger);
+    
+    newHamburger.addEventListener('click', () => {
+      newHamburger.classList.toggle('active');
+      mobileNav.classList.toggle('mobile-active');
+    });
+
+    // Close nav when clicking a link
+    const mobileLinks = mobileNav.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        newHamburger.classList.remove('active');
+        mobileNav.classList.remove('mobile-active');
+      });
+    });
+  }
+
   // 1.5 Staggered Text Setup (Apple Style)
   const applyStaggeredSlideUp = (selector) => {
     document.querySelectorAll(selector).forEach(el => {
@@ -385,3 +409,58 @@ window.initAppAnimations = function() {
   }
 
 };
+
+// === Admin Access Triggers ===
+
+// 1. Keyboard Shortcuts
+let secretBuffer = '';
+document.addEventListener('keydown', (e) => {
+
+  // Option B: Typing "admin" on the keyboard anywhere
+  if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1) {
+    secretBuffer += e.key.toLowerCase();
+    if (secretBuffer.includes('admin')) {
+      window.location.href = 'admin.html';
+      secretBuffer = '';
+    }
+    if (secretBuffer.length > 10) secretBuffer = secretBuffer.slice(-10);
+  }
+});
+
+// 2. 5 Clicks on the Main Logo
+let logoClickCount = 0;
+let logoClickTimer;
+
+document.addEventListener('click', (e) => {
+  const logo = e.target.closest('.nav-logo') || e.target.closest('.footer-logo') || e.target.closest('.hero-logo-large');
+  
+  if (logo) {
+    // Prevent immediate navigation so we can count clicks
+    e.preventDefault();
+    e.stopPropagation();
+    
+    logoClickCount++;
+    
+    // If reached 5 clicks
+    if (logoClickCount >= 5) {
+      clearTimeout(logoClickTimer);
+      logoClickCount = 0;
+      window.location.href = 'admin.html';
+      return;
+    }
+    
+    // Reset timer for clicks (Wait 400ms to see if they click again)
+    clearTimeout(logoClickTimer);
+    logoClickTimer = setTimeout(() => {
+      if (logoClickCount > 0 && logoClickCount < 5) {
+        logoClickCount = 0; // Reset count
+        // Perform the normal navigation since they didn't reach 5 clicks
+        if (window.swup) {
+          window.swup.loadPage({ url: logo.href });
+        } else {
+          window.location.href = logo.href;
+        }
+      }
+    }, 400); // 400ms window between clicks
+  }
+});

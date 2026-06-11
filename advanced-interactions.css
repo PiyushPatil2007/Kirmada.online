@@ -45,6 +45,86 @@ body.cursor-hover #lens-cursor {
   backdrop-filter: blur(0px) brightness(1);
   -webkit-backdrop-filter: blur(0px) brightness(1);
   background: transparent;
+  border-bottom: 2px solid transparent;
+}
+
+/* ----------------------------------------------------
+   VIDEO LIGHTBOX (GLASSMORPHISM)
+   ---------------------------------------------------- */
+.video-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(32, 32, 32, 0.85); /* Close to surface-dark but transparent */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.video-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 1024px;
+  aspect-ratio: 16/9;
+  border-radius: var(--rounded-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.video-modal-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: var(--rounded-lg);
+  background: var(--surface-deep);
+  border: 1px solid var(--divider-dark);
+}
+
+.video-modal-close {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background: var(--surface-card);
+  color: var(--ink);
+  border: 1px solid var(--hairline-strong);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--rounded-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10000;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.video-modal-close:hover {
+  transform: scale(1.1);
+  background: var(--canvas);
+}
+
+@media (max-width: 768px) {
+  .video-modal-overlay {
+    padding: var(--spacing-md);
+  }
+  .video-modal-content {
+    aspect-ratio: 16/9; /* Keep 16:9 for videos even on mobile */
+  }
+  .video-modal-close {
+    top: -16px;
+    right: -10px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+body.cursor-hover #lens-cursor {
   border: 2px solid var(--primary);
   box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
 }
@@ -139,7 +219,7 @@ body.cursor-click #lens-cursor {
    ------------------------------------- */
 .liquid-curtain {
   position: fixed;
-  top: 100vh; /* Hidden below the viewport */
+  top: 150vh; /* Hidden deeply below the viewport */
   left: -25vw;
   width: 150vw;
   height: 150vh;
@@ -159,4 +239,921 @@ html.is-animating .transition-fade {
   opacity: 0;
 }
 
+/* ==========================================================================
+   ULTIMATE GALLERY LAYOUTS (MULTI-VIEW)
+   ========================================================================== */
 
+/* The Layout Switcher Buttons */
+.layout-switcher .btn-icon {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+  color: var(--charcoal);
+  border-radius: var(--rounded-md);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Dark Mode Header */
+.gallery-header.dark-mode {
+  background-color: var(--surface-dark);
+  color: var(--on-dark);
+  border-bottom: 1px solid var(--divider-dark);
+}
+
+.gallery-header.dark-mode .display-xl {
+  color: var(--on-dark);
+}
+
+.gallery-header.dark-mode .sub-nav-pill {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--on-dark-mute);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy animation */
+  backdrop-filter: blur(8px);
+}
+
+.gallery-header.dark-mode .sub-nav-pill:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateY(-2px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-header.dark-mode .sub-nav-pill.active {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(234, 40, 4, 0.4);
+}
+
+.gallery-header.dark-mode .layout-switcher .btn-icon {
+  background-color: var(--surface-deep);
+  border-color: var(--divider-dark);
+  color: var(--on-dark-mute);
+}
+
+.gallery-header.dark-mode .layout-switcher .btn-icon:hover {
+  background-color: var(--surface-card);
+  color: var(--ink);
+}
+
+.gallery-header.dark-mode .layout-switcher .btn-icon.active {
+  background-color: var(--surface-dark);
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+.layout-switcher .btn-icon:hover {
+  background-color: var(--canvas);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.layout-switcher .btn-icon.active {
+  background-color: var(--surface-dark);
+  color: var(--on-dark);
+  border-color: var(--surface-dark);
+}
+
+/* Base Gallery Grid tweaks for smooth transitions */
+.gallery-grid {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+/* ----------------------------------------------------
+   1. VIEW: MASONRY (Default Waterfall - relies on styles.css columns)
+   ---------------------------------------------------- */
+.gallery-grid.view-masonry {
+  display: block;
+  columns: 3;
+  column-gap: var(--spacing-xl);
+}
+@media (max-width: 1024px) {
+  .gallery-grid.view-masonry { columns: 2; }
+}
+@media (max-width: 640px) {
+  .gallery-grid.view-masonry { columns: 1; }
+}
+.gallery-grid.view-masonry .gallery-card {
+  break-inside: avoid;
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------------------------------------
+   2. VIEW: BENTO BOX
+   ---------------------------------------------------- */
+.gallery-grid.view-bento {
+  display: grid !important;
+  columns: auto; /* override masonry */
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 280px;
+  gap: var(--spacing-lg);
+}
+@media (max-width: 1024px) {
+  .gallery-grid.view-bento { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .gallery-grid.view-bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
+}
+
+.gallery-grid.view-bento .gallery-card {
+  margin-bottom: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-grid.view-bento .gallery-thumb {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  margin: 0; border-radius: 0;
+  z-index: 1;
+}
+
+.gallery-grid.view-bento .video-embed-wrapper {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%; aspect-ratio: auto; margin: 0; border-radius: 0; z-index: 1;
+}
+
+/* Overlay gradient for text readability in Bento */
+.gallery-grid.view-bento .gallery-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 60%;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gallery-grid.view-bento .heading-sm,
+.gallery-grid.view-bento .body-sm {
+  position: relative;
+  z-index: 3;
+  color: white !important;
+}
+
+/* Bento spanning logic (applied via JS based on index) */
+.gallery-grid.view-bento .bento-large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.gallery-grid.view-bento .bento-wide {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+.gallery-grid.view-bento .bento-tall {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+/* ----------------------------------------------------
+   3. VIEW: FILMSTRIP
+   ---------------------------------------------------- */
+.gallery-grid.view-filmstrip {
+  display: flex !important;
+  columns: auto;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl) 50vw var(--spacing-xl) var(--spacing-xl); /* Overscroll */
+  align-items: center;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+.gallery-grid.view-filmstrip::-webkit-scrollbar { 
+  display: none; 
+}
+
+.gallery-grid.view-filmstrip .gallery-card {
+  flex: 0 0 600px;
+  scroll-snap-align: center;
+  margin-bottom: 0;
+  height: 400px;
+  opacity: 0.5;
+  transition: all 0.4s ease;
+  transform: scale(0.9);
+}
+@media (max-width: 768px) {
+  .gallery-grid.view-filmstrip .gallery-card { flex: 0 0 85vw; height: 350px; }
+}
+
+.gallery-grid.view-filmstrip .gallery-card:hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.gallery-grid.view-filmstrip .gallery-thumb {
+  height: 250px;
+}
+
+/* ----------------------------------------------------
+   4. VIEW: HOVER LIST
+   ---------------------------------------------------- */
+.gallery-grid.view-list {
+  display: flex !important;
+  columns: auto;
+  flex-direction: column;
+  gap: 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.gallery-grid.view-list .gallery-card {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--hairline-strong);
+  border-radius: 0;
+  padding: var(--spacing-xl) 0;
+  margin-bottom: 0;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gallery-grid.view-list .gallery-card:hover {
+  background: rgba(32, 32, 32, 0.02);
+}
+
+/* Hide image in layout, keep it for cursor tracking logic handled in JS */
+.gallery-grid.view-list .gallery-thumb,
+.gallery-grid.view-list .video-embed-wrapper,
+.gallery-grid.view-list .gallery-metric,
+.gallery-grid.view-list .video-play-icon {
+  display: none !important;
+}
+
+.gallery-grid.view-list .heading-sm {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--ink);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.gallery-grid.view-list .body-sm {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.gallery-grid.view-list .gallery-card:hover .heading-sm {
+  transform: translateX(20px);
+  color: var(--primary);
+}
+
+/* Hover Cursor Image Follower Container */
+#hover-reveal-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 320px;
+  height: 240px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: var(--rounded-md);
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+
+#hover-reveal-cursor.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#hover-reveal-cursor img,
+#hover-reveal-cursor video,
+#hover-reveal-cursor iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+}
+
+/* ==========================================================================
+   DYNAMIC OFFER REDESIGN (Billion-Dollar Bento)
+   ========================================================================== */
+
+.offer-bento-card {
+  background-color: var(--surface-deep);
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-xxl);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.offer-bento-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 60%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(234,40,4,0.08) 0%, rgba(234,40,4,0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.offer-content-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--spacing-xxl);
+  position: relative;
+  z-index: 1;
+}
+
+.offer-col-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.offer-col-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: var(--spacing-xl);
+  border-left: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 900px) {
+  .offer-content-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+  .offer-col-right {
+    padding-left: 0;
+    border-left: none;
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+}
+
+.live-pulsar-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(234,40,4,0.1);
+  border: 1px solid rgba(234,40,4,0.2);
+  padding: 6px 14px;
+  border-radius: var(--rounded-full);
+  margin-bottom: var(--spacing-md);
+}
+
+.live-pulsar-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--primary);
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 40, 4, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(234, 40, 4, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 40, 4, 0); }
+}
+
+.offer-stats-container {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 500px) {
+  .offer-stats-container {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+.offer-stat-block {
+  background-color: rgba(255,255,255,0.02);
+  border: 1px solid var(--divider-dark);
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.offer-stat-label {
+  font-size: 12px;
+  color: var(--on-dark-mute);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Glass Timer Tiles */
+.timer-container {
+  display: flex;
+  gap: 12px;
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  width: 100%;
+}
+
+.timer-tile {
+  background-color: rgba(0,0,0,0.3);
+  border: 1px solid var(--divider-dark);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--rounded-md);
+  padding: 16px 0;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+@media (max-width: 768px) {
+  .offer-bento-card {
+    padding: var(--spacing-lg) !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .timer-container {
+    gap: 8px;
+  }
+  .timer-tile {
+    width: auto;
+    flex: 1;
+    padding: 12px 0;
+  }
+  .timer-value {
+    font-size: 28px !important;
+  }
+  .timer-label {
+    font-size: 10px !important;
+    letter-spacing: 0.5px !important;
+  }
+}
+
+.timer-value {
+  font-family: 'jetbrains-mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  display: inline-block;
+}
+
+.timer-label {
+  font-size: 11px;
+  color: var(--on-dark-mute);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   CUSTOM BRAND PRELOADER (SVG PATH ANIMATION)
+   ========================================================================== */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--surface-deep); /* Pitch black for premium feel */
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1);
+  transform-origin: top;
+}
+
+#preloader.hidden {
+  transform: scaleY(0);
+}
+
+.preloader-track {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.preloader-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.preloader-text-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.preloader-text {
+  font-family: 'rb-freigeist-neue', 'Bricolage Grotesque', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: white;
+  opacity: 0;
+  display: block;
+  transform: translateY(100%);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   LOTTIE PLAYER SIZING
+   ========================================================================== */
+.lottie-player {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lottie-player svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ==========================================================================
+   PREMIUM AI CHATBOT WIDGET
+   ========================================================================== */
+.ai-chat-widget {
+  position: fixed;
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
+  z-index: 2147483647; /* Maximum possible z-index to ensure it never disappears */
+  transform: translateZ(9999px); /* Force 3D hardware-accelerated stacking context */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'Inter', sans-serif;
+}
+
+.ai-chat-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  box-shadow: 0 10px 30px rgba(234, 40, 4, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ai-chat-button:hover {
+  transform: scale(1.1);
+}
+
+.ai-chat-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ai-chat-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(234, 40, 4, 0.4) 0%, transparent 60%);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  animation: wa-pulse 3s infinite alternate;
+}
+
+.ai-chat-window {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 350px;
+  height: 500px;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--rounded-lg);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ai-chat-window.hidden {
+  opacity: 0;
+  transform: scale(0.5) translateY(50px);
+  pointer-events: none;
+}
+
+.ai-chat-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ai-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(234, 40, 4, 0.2), transparent);
+  border: 1px solid rgba(234, 40, 4, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.ai-avatar svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ai-header-info {
+  flex: 1;
+}
+
+.ai-header-info h4 {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+}
+
+.ai-status {
+  font-size: 10px;
+  color: var(--on-dark-mute);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--on-dark-mute);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.ai-close-btn:hover {
+  color: white;
+}
+
+.ai-close-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ai-chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Scrollbar for chat */
+.ai-chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+.ai-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.ai-message {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: message-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes message-pop {
+  0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.bot-message {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.user-message {
+  align-self: flex-end;
+  background: var(--primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.bot-typing {
+  align-self: flex-start;
+  background: transparent;
+  padding: 8px 12px;
+  display: flex;
+  gap: 4px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--on-dark-mute);
+  border-radius: 50%;
+  animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.ai-chat-input-area {
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#ai-chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 10px 16px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#ai-chat-input:focus {
+  border-color: var(--primary);
+}
+
+#ai-chat-send {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+#ai-chat-send:hover {
+  transform: scale(1.05);
+  background: var(--primary-deep);
+}
+
+#ai-chat-send svg {
+  width: 18px;
+  height: 18px;
+  margin-left: -2px; /* visual center for send icon */
+}
+
+/* ==========================================================================
+   RESPONSIVE OVERRIDES (Chatbot & Cursor)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  /* Remove custom cursor animation for touch devices (tablet & mobile) */
+  #lens-cursor {
+    display: none !important;
+  }
+
+  /* Chatbot Widget Adjustments for Tablet */
+  .ai-chat-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+  .ai-chat-window {
+    width: 340px;
+    height: 500px;
+    max-height: 70vh;
+    bottom: 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ai-chat-widget {
+    bottom: 16px;
+    right: 16px;
+    /* Remove transform so fixed children can break out to viewport */
+    transform: none; 
+  }
+  
+  /* Chatbot Fullscreen for Mobile */
+  .ai-chat-window {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    z-index: 10001;
+    margin: 0;
+    max-height: none;
+  }
+  .ai-chat-window.hidden {
+    transform: scale(0.9) translateY(100vh);
+  }
+  .ai-chat-messages {
+    overscroll-behavior: contain; /* Prevent body scroll bleeding */
+  }
+}
+/* Gallery Pin Badge */
+.gallery-pin-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 0 8px rgba(234,40,4,0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
