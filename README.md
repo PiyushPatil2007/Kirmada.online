@@ -18,6 +18,32 @@ This repository contains the source code for [Kirmada.Online](https://kirmada.on
 *   **Neural Dashboard:** A mock administrative panel simulating deep-level digital control and infrastructure deployment.
 *   **Performance First:** Built without heavy DOM libraries. Every scroll, hover, and click responds instantly.
 
+## 💻 How to Run Locally
+
+Because this project uses Netlify Serverless Functions for the AI Chatbot, you have two options for running the project on your local machine:
+
+### Option 1: Full Environment (Recommended)
+This runs both the frontend UI and the backend AI serverless functions. Use this if you want to test the AI Chatbot.
+
+1. Install the Netlify CLI (if you haven't already):
+   ```bash
+   npm install netlify-cli -g
+   ```
+2. Run the development server:
+   ```bash
+   npx netlify dev
+   ```
+   *The site will open automatically (usually at `http://localhost:8888`). The AI Chatbot will be fully functional.*
+
+### Option 2: Simple UI Environment
+This runs the frontend UI only. Use this if you are just working on HTML/CSS and don't need the AI Chatbot to respond. 
+
+You can use any simple web server, for example:
+```bash
+python -m http.server 8000
+```
+*Note: In this mode, the AI Chatbot will throw a `Network Error: Unexpected token '<'` because the backend Netlify functions are not running.*
+
 ## 📂 Project Structure
 
 ```text

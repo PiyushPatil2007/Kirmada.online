@@ -150,18 +150,50 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       chatHistory.push({ role: "user", parts: [{ text: text }] });
       
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: chatHistory })
-      });
+      let response;
+      let retries = 3;
+      let delay = 1500; // start with 1.5s delay
+      let data;
       
-      const data = await response.json();
+      while (retries > 0) {
+        response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: chatHistory })
+        });
+        
+        data = await response.json();
+        
+        if (response.ok) {
+          break; // Success!
+        }
+        
+        // If it's a 429 (Too Many Requests) or 503 (Service Unavailable/Model Overloaded)
+        if (response.status === 429 || response.status === 503) {
+          retries--;
+          if (retries > 0) {
+            console.warn(`High demand error (${response.status}). Retrying in ${delay}ms...`);
+            await new Promise(res => setTimeout(res, delay));
+            delay *= 2; // Exponential backoff (1.5s, 3s)
+          }
+        } else {
+          // Break immediately for other errors (like 400 Bad Request)
+          break;
+        }
+      }
+      
       removeTyping();
       
       if (!response.ok) {
         console.error("Gemini API Error Data:", data);
-        appendMessage(`API Error: ${data.error?.message || response.statusText}`, false);
+        
+        // Show a friendly message for high demand if we still failed after retries
+        if (response.status === 429 || response.status === 503) {
+          appendMessage("I'm experiencing high demand right now. Please try again in a moment! ⏳", false);
+        } else {
+          appendMessage(`API Error: ${data.error?.message || response.statusText}`, false);
+        }
+        
         chatHistory.pop(); // Remove the failed message
         return;
       }
