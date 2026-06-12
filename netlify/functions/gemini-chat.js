@@ -1,5 +1,31 @@
 // netlify/functions/gemini-chat.js
 exports.handler = async function(event, context) {
+  const allowedOrigins = ["https://kirmada.online", "http://localhost:8888", "http://localhost:5500", "http://127.0.0.1:5500"];
+  const origin = event.headers.origin || event.headers.Origin;
+  
+  const corsOrigin = allowedOrigins.includes(origin) ? origin : "https://kirmada.online";
+
+  // Handle CORS Preflight requests
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: {
+        "Access-Control-Allow-Origin": corsOrigin,
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTIONS"
+      },
+      body: ""
+    };
+  }
+
+  // Security: Block unauthorized origins
+  if (origin && !allowedOrigins.includes(origin)) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({ error: "Forbidden: Unauthorized Origin" })
+    };
+  }
+
   // Only allow POST requests
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
@@ -43,7 +69,8 @@ exports.handler = async function(event, context) {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": corsOrigin
       },
       body: JSON.stringify(data)
     };
