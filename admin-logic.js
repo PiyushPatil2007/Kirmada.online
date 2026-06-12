@@ -217,7 +217,23 @@ fileInput.addEventListener('change', function() {
 
 function handleFiles(files) {
   if (files.length > 0) {
-    selectedFile = files[0];
+    const file = files[0];
+    
+    // Cloudinary Security Rules (Frontend Validation)
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/webp', 'video/mp4'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      showStatus('Security Alert: Invalid file type. Only PNG, JPG, WEBP, and MP4 are allowed.', true);
+      return;
+    }
+
+    if (file.size > maxSize) {
+      showStatus(`Security Alert: File is too large (${(file.size / 1024 / 1024).toFixed(2)}MB). Maximum size is 5MB.`, true);
+      return;
+    }
+
+    selectedFile = file;
     if (selectedFile.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => {
