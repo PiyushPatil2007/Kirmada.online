@@ -18,9 +18,9 @@ exports.handler = async function(event, context) {
     const body = JSON.parse(event.body);
     const contents = body.contents;
 
-    // We use gemini-1.5-flash-latest
+    // We use gemini-3.5-flash
     // The new AQ. keys must be passed via the x-goog-api-key header instead of ?key=
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent`;
     
     const response = await fetch(url, {
       method: "POST",
