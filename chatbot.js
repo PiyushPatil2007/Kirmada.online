@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let isFirstOpen = true;
 
   // ==========================================
-  // GEMINI AI CONFIGURATION (NATIVE REST API)
+  // GEMINI AI CONFIGURATION (NETLIFY SERVERLESS)
   // ==========================================
-  const API_KEY = "AQ.Ab8RN6J4IAk_LNNgKQmxrG4kFp3wYJJ5VlYNxSGOKdyBnmEdyw";
-  const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=" + API_KEY;
+  // We no longer store the API key in the frontend code for security!
+  // Instead, requests are routed to our Netlify serverless function.
+  const API_URL = "/.netlify/functions/gemini-chat";
   
   // Custom manual history array
   let chatHistory = [];
@@ -145,14 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     await checkAndSaveEmail(text);
     showTyping();
 
-    if (API_KEY === "YOUR_API_KEY_HERE") {
-      setTimeout(() => {
-        removeTyping();
-        appendMessage("The Kirmada AI is currently offline. Please set the Gemini API Key in the codebase.", false);
-      }, 1000);
-      return;
-    }
-
+    // Make request to our secure backend function
     try {
       chatHistory.push({ role: "user", parts: [{ text: text }] });
       
