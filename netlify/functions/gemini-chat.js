@@ -3,7 +3,10 @@ exports.handler = async function(event, context) {
   const allowedOrigins = ["https://kirmada.online", "http://localhost:8888", "http://localhost:5500", "http://127.0.0.1:5500"];
   const origin = event.headers.origin || event.headers.Origin;
   
-  const corsOrigin = allowedOrigins.includes(origin) ? origin : "https://kirmada.online";
+  const isNetlify = origin && origin.endsWith('.netlify.app');
+  const isAllowed = !origin || origin === "null" || allowedOrigins.includes(origin) || isNetlify;
+  
+  const corsOrigin = isAllowed && origin ? origin : "https://kirmada.online";
 
   // Handle CORS Preflight requests
   if (event.httpMethod === "OPTIONS") {
@@ -19,10 +22,11 @@ exports.handler = async function(event, context) {
   }
 
   // Security: Block unauthorized origins
-  if (origin && !allowedOrigins.includes(origin)) {
+  if (!isAllowed) {
     return {
       statusCode: 403,
-      body: JSON.stringify({ error: "Forbidden: Unauthorized Origin" })
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ error: { message: `Forbidden: Unauthorized Origin (${origin}). Please add your domain to allowedOrigins in gemini-chat.js.` } })
     };
   }
 
