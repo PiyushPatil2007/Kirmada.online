@@ -235,6 +235,43 @@
     </div>
   </section>
 
+  <!-- Interactive AI Sandbox Section -->
+  <section class="section" style="background-color: var(--canvas); padding-top: 0;">
+    <div class="container">
+      <div class="sandbox-container stagger-card" style="background-color: var(--surface-dark); border-radius: var(--rounded-lg); padding: var(--spacing-xl); box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 1px solid var(--hairline-strong);">
+        <div class="flex-col md-flex-row gap-xl">
+          
+          <!-- Left: Input Area -->
+          <div class="sandbox-input-col" style="flex: 1;">
+            <h3 class="heading-md" style="color: var(--on-dark); margin-bottom: var(--spacing-sm);">Experience Our AI</h3>
+            <p class="body-sm" style="color: var(--on-dark-mute); margin-bottom: var(--spacing-lg);">
+              Type your business name or niche below. Our custom Gemini integration will generate a high-converting marketing angle instantly.
+            </p>
+            <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);">
+              <input type="text" id="sandbox-input" maxlength="50" placeholder="e.g. Neon Coffee Shop" style="flex: 1; padding: 12px 16px; border-radius: var(--rounded-md); border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; font-family: 'Inter', sans-serif;">
+              <button id="sandbox-generate-btn" class="btn-primary" style="border-radius: var(--rounded-md); white-space: nowrap;">Generate</button>
+            </div>
+            <p class="body-sm" style="color: var(--mute); font-size: 12px;">Powered by Gemini 3.5 Flash API</p>
+          </div>
+
+          <!-- Right: Terminal Area -->
+          <div class="sandbox-terminal-col" style="flex: 1; background: #0a0a0a; border-radius: var(--rounded-md); border: 1px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; flex-direction: column;">
+            <div class="terminal-header" style="background: #1a1a1a; padding: 8px 16px; display: flex; gap: 6px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></div>
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></div>
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></div>
+              <span style="color: #666; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-left: 10px;">kirmada-ai-engine.sh</span>
+            </div>
+            <div class="terminal-body" id="sandbox-terminal-body" style="padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #00ff00; height: 180px; overflow-y: auto; line-height: 1.6;">
+              > Awaiting input...<span class="blinking-cursor">_</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Featured Capabilities (Dark Band) -->
   <section class="section" style="background-color: var(--surface-dark); color: var(--on-dark);">
     <div class="container">
@@ -451,6 +488,7 @@
   <script type="module" src="dynamic-data.js"></script>
   <script type="module" src="chatbot.js"></script>
   <script src="custom-dropdown.js?v=3"></script>
+  <script type="module" src="sandbox.js"></script>
   
   <script>
     // --- Limited-Time Offer Countdown Script removed (Now handled dynamically via Firebase at top of document) ---

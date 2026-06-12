@@ -1,0 +1,29 @@
+[33mcommit e7286eab11a67234fcaf3c0f2d687971b1d3b61b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Piyush Patil <piyushpatil200711@gmail.com>
+Date:   Fri Jun 12 14:30:46 2026 +0530
+
+    feat: Add magnetic interactions, anime.js injection, and film grain texture
+
+[33mcommit d06edeffd09111b71d47413cfcb7ce95f55befd0[m
+Author: Piyush Patil <piyushpatil200711@gmail.com>
+Date:   Fri Jun 12 13:30:43 2026 +0530
+
+    fix: updated CORS rules to allow netlify test domains
+
+[33mcommit f7346062651de132d8512348feff0aee01855112[m
+Author: Piyush Patil <piyushpatil200711@gmail.com>
+Date:   Fri Jun 12 13:26:31 2026 +0530
+
+    security: added strict CORS policy to Gemini API
+
+[33mcommit e847ed08e310d1dd6cbcf766cb25207595fad95b[m
+Author: Piyush Patil <piyushpatil200711@gmail.com>
+Date:   Fri Jun 12 13:19:30 2026 +0530
+
+    feat: added HTTP security headers and Cloudinary frontend validation
+
+[33mcommit 9143b6f2972c17b90cb5a7d205f1783a15549e75[m
+Author: Piyush Patil <piyushpatil200711@gmail.com>
+Date:   Fri Jun 12 12:27:20 2026 +0530
+
+    chore: full SEO optimization with MX schema, sitemap, and robots.txt

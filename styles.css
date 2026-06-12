@@ -1640,3 +1640,47 @@ select.premium-input option {
   background: rgba(234, 40, 4, 0.05);
   font-weight: 500;
 }
+
+/* AI Sandbox Styles */
+.sandbox-container {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sandbox-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+
+.blinking-cursor {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.md-flex-row {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .md-flex-row {
+    flex-direction: row;
+  }
+}
+
+.sandbox-terminal-col::-webkit-scrollbar {
+  width: 8px;
+}
+.sandbox-terminal-col::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+.sandbox-terminal-col::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+.sandbox-terminal-col::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
