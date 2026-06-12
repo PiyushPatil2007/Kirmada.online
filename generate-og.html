@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Perfect OG Image</title>
+  <style>
+    body { background: #111; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px; }
+    canvas { border: 1px solid #333; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    button { margin-top: 20px; padding: 12px 24px; background: #ea2804; color: white; border: none; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 4px; }
+    button:hover { background: #c01f00; }
+  </style>
+</head>
+<body>
+  <h2>Perfect OpenGraph Image Generator</h2>
+  <p>This script takes your exact transparent logo and perfectly centers it on a 1200x630 dark background for social media.</p>
+  
+  <canvas id="ogCanvas" width="1200" height="630"></canvas>
+  <button id="downloadBtn">Download og-image.png</button>
+
+  <script>
+    const canvas = document.getElementById('ogCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // 1. Draw dark background
+    ctx.fillStyle = '#111111'; // Deep premium black
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 2. Load the actual logo
+    const logo = new Image();
+    logo.src = 'large-logo.png'; // Load the transparent logo
+    
+    logo.onload = () => {
+      // Calculate how to center the logo. 
+      // We'll scale the logo so it fits nicely (e.g. max 60% of the canvas width)
+      const maxLogoWidth = 720; 
+      let drawWidth = logo.width;
+      let drawHeight = logo.height;
+
+      if (drawWidth > maxLogoWidth) {
+        const ratio = maxLogoWidth / drawWidth;
+        drawWidth = maxLogoWidth;
+        drawHeight = drawHeight * ratio;
+      }
+
+      const x = (canvas.width - drawWidth) / 2;
+      const y = (canvas.height - drawHeight) / 2;
+
+      // Draw the logo onto the canvas
+      ctx.drawImage(logo, x, y, drawWidth, drawHeight);
+    };
+
+    // 3. Download Logic
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'og-image.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>
