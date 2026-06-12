@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent = 'Generating...';
 
     // Show initial terminal text
-    terminalBody.innerHTML = `> Initializing Kirmada AI...<br>> Analyzing niche: <span style="color: #ffbd2e;">${bizName}</span><br>> Compiling aggressive strategy...<span class="blinking-cursor">_</span>`;
+    terminalBody.innerHTML = `> Initializing Kirmada AI...<br>> Analyzing niche: <span style="color: #ffbd2e;">${bizName}</span><br>> Compiling professional strategy...<span class="blinking-cursor">_</span>`;
     
     // Construct strict prompt
     const prompt = `Act as an elite, high-end digital marketing agency (Kirmada.Online). The user just provided their business/niche: "${bizName}".
-Write a punchy, aggressive 3-sentence marketing strategy to dominate their competition. Use confident, slightly ruthless agency tone. Do NOT use markdown.`;
+Write a simple, precise, and highly professional 3-sentence marketing strategy to help them grow. Use a confident, expert agency tone. Do NOT use violent, aggressive, or overly dramatic words. Do NOT use markdown.`;
 
     const requestBody = {
       contents: [{
